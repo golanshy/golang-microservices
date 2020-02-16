@@ -23,14 +23,14 @@ func TestGetUserNoUseFound(t *testing.T) {
 		t.Error("We were expecting an error when user_id := 0")
 	}
 
-	if err.Status != http.StatusNotFound {
+	if err.StatusCode != http.StatusNotFound {
 		t.Error("We were expecting http.StatusNotFound")
 	}
 
 	assert.Nil(t, user, "We were not expecting a user with user_id := 0")
 	assert.NotNil(t, err, "We were expecting an error when user_id := 0")
 	assert.EqualValues(t, "user 0 not found", err.Message, )
-	assert.EqualValues(t, http.StatusNotFound, err.Status)
+	assert.EqualValues(t, http.StatusNotFound, err.StatusCode)
 
 }
 

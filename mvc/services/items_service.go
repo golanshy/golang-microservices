@@ -12,7 +12,7 @@ var (ItemService itemService)
 func (u *itemService) GetItem(itemId string) (*domain.Item , *utils.ApplicationError) {
 	return nil, &utils.ApplicationError {
 		Message: "implement me",
-		Status: http.StatusInternalServerError,
+		StatusCode: http.StatusInternalServerError,
 		Code: "implement_me",
 	}
 }

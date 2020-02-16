@@ -26,14 +26,14 @@ func TestUserService_GetUserNotFoundInDB(t *testing.T) {
 	getUserFunction = func(userId int64) (user *domain.User, applicationError *utils.ApplicationError) {
 		return nil, &utils.ApplicationError{
 			Message: "user 0 not found",
-			Status:  http.StatusNotFound,
+			StatusCode:  http.StatusNotFound,
 			Code:    "not_found",
 		}
 	}
 	user, err := UserService.GetUser(0)
 	assert.Nil(t, user)
 	assert.NotNil(t, err)
-	assert.EqualValues(t, http.StatusNotFound, err.Status)
+	assert.EqualValues(t, http.StatusNotFound, err.StatusCode)
 	assert.EqualValues(t, "user 0 not found", err.Message)
 }
 
