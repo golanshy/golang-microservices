@@ -20,7 +20,6 @@ func getAuthorizationHeader(accessToken string) string {
 	return fmt.Sprintf(headerAuthorizationFormat, accessToken)
 }
 func CreateRepo(accessToken string, request github.CreatRepoRequest) (*github.CreatRepoResponse, *github.GithubErrorReposnse) {
-	// Authorization token 6aeae9e2b5b55233ef30944a86c1eba669c99011
 	header := getAuthorizationHeader(accessToken)
 	headers := http.Header{}
 	headers.Set(headerAuthorization, header)
