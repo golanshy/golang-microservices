@@ -27,7 +27,7 @@ func init() {
 func (s *repoService) CreateRepo(input repositories.CreateRepoRequest) (*repositories.CreateRepoResponse, errors.APiError) {
 	input.Name = strings.TrimSpace(input.Name)
 	if input.Name == "" {
-		return nil, errors.NewBadRequestError("invalid repository name")
+		return nil, errors.NewBadRequestError("Invalid repository name")
 	}
 
 	request := github.CreatRepoRequest{
