@@ -1,9 +1,12 @@
 package services
 
 import (
+	"fmt"
 	"github.com/golanshy/golang-microservices/src/api/config"
 	"github.com/golanshy/golang-microservices/src/api/domain/github"
 	"github.com/golanshy/golang-microservices/src/api/domain/repositories"
+	"github.com/golanshy/golang-microservices/src/api/log/option_a"
+	"github.com/golanshy/golang-microservices/src/api/log/option_b"
 	"github.com/golanshy/golang-microservices/src/api/providers/github_provider"
 	"github.com/golanshy/golang-microservices/src/api/utils/errors"
 	"net/http"
@@ -26,7 +29,7 @@ func init() {
 	RepositoryService = &repoService{}
 }
 
-func (s *repoService) CreateRepo(input repositories.CreateRepoRequest) (*repositories.CreateRepoResponse, errors.APiError) {
+func (s *repoService) CreateRepo(cliendId string, input repositories.CreateRepoRequest) (*repositories.CreateRepoResponse, errors.APiError) {
 
 	if err := input.Validate(); err != nil {
 		return nil, err
@@ -37,11 +40,35 @@ func (s *repoService) CreateRepo(input repositories.CreateRepoRequest) (*reposit
 		Description: input.Description,
 		Private:     false,
 	}
+	option_a.Info("about to send request to external api",
+		fmt.Sprintf("clientId:%s", cliendId),
+		"status:pending")
+	option_b.Info("about to send request to external api",
+		option_b.Field("clientId", cliendId),
+		option_b.Field("status", "pending"),
+		option_b.Field("authenticated", cliendId != "")
 
 	response, err := github_provider.CreateRepo(config.GetGithubAccessToken(), request)
 	if err != nil {
+		option_a.Error("response obtained from external api",
+			err,
+			fmt.Sprintf("clientId:%s", cliendId),
+			"status:error")
+		option_b.Error("response obtained from external api",
+			err,
+			option_b.Field("clientId", cliendId),
+			option_b.Field("status", "error"),
+			option_b.Field("authenticated", cliendId != ""))
+
 		return nil, errors.NewApiError(err.StatusCode, err.Message)
 	}
+	option_a.Info("response obtained from external api",
+		fmt.Sprintf("clientId:%s", cliendId),
+		"status:success")
+	option_b.Info("response obtained from external api",
+		option_b.Field("clientId", cliendId),
+		option_b.Field("status", "success"),
+		option_b.Field("authenticated", cliendId != "")
 
 	result := &repositories.CreateRepoResponse{
 		Id:    response.Id,
