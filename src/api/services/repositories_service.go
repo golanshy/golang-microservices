@@ -18,8 +18,8 @@ type repoService struct {
 }
 
 type repoServiceInterface interface {
-	CreateRepo(request repositories.CreateRepoRequest) (*repositories.CreateRepoResponse, errors.APiError)
-	CreateRepos(request []repositories.CreateRepoRequest) (repositories.CreateReposResponse, errors.APiError)
+	CreateRepo(cliendId string, request repositories.CreateRepoRequest) (*repositories.CreateRepoResponse, errors.APiError)
+	CreateRepos(cliendId string, request []repositories.CreateRepoRequest) (repositories.CreateReposResponse, errors.APiError)
 }
 
 var (
@@ -41,35 +41,35 @@ func (s *repoService) CreateRepo(cliendId string, input repositories.CreateRepoR
 		Description: input.Description,
 		Private:     false,
 	}
-	option_a.Info("about to send request to external api",
-		fmt.Sprintf("clientId:%s", cliendId),
-		"status:pending")
-	option_b.Info("about to send request to external api",
-		option_b.Field("clientId", cliendId),
-		option_b.Field("status", "pending"),
-		option_b.Field("authenticated", cliendId != "")
+	//option_a.Info("about to send request to external api",
+	//	fmt.Sprintf("clientId:%s", cliendId),
+	//	"status:pending")
+	//option_b.Info("about to send request to external api",
+	//	option_b.Field("clientId", cliendId),
+	//	option_b.Field("status", "pending"),
+	//	option_b.Field("authenticated", cliendId != "")
 
 	response, err := github_provider.CreateRepo(config.GetGithubAccessToken(), request)
 	if err != nil {
-		option_a.Error("response obtained from external api",
-			err,
-			fmt.Sprintf("clientId:%s", cliendId),
-			"status:error")
-		option_b.Error("response obtained from external api",
-			err,
-			option_b.Field("clientId", cliendId),
-			option_b.Field("status", "error"),
-			option_b.Field("authenticated", cliendId != ""))
+		//option_a.Error("response obtained from external api",
+		//	err,
+		//	fmt.Sprintf("clientId:%s", cliendId),
+		//	"status:error")
+		//option_b.Error("response obtained from external api",
+		//	err,
+		//	option_b.Field("clientId", cliendId),
+		//	option_b.Field("status", "error"),
+		//	option_b.Field("authenticated", cliendId != ""))
 
 		return nil, errors.NewApiError(err.StatusCode, err.Message)
 	}
-	option_a.Info("response obtained from external api",
-		fmt.Sprintf("clientId:%s", cliendId),
-		"status:success")
-	option_b.Info("response obtained from external api",
-		option_b.Field("clientId", cliendId),
-		option_b.Field("status", "success"),
-		option_b.Field("authenticated", cliendId != "")
+	//option_a.Info("response obtained from external api",
+	//	fmt.Sprintf("clientId:%s", cliendId),
+	//	"status:success")
+	//option_b.Info("response obtained from external api",
+	//	option_b.Field("clientId", cliendId),
+	//	option_b.Field("status", "success"),
+	//	option_b.Field("authenticated", cliendId != "")
 
 	result := &repositories.CreateRepoResponse{
 		Id:    response.Id,
@@ -80,7 +80,7 @@ func (s *repoService) CreateRepo(cliendId string, input repositories.CreateRepoR
 	return result, nil
 }
 
-func (s *repoService) CreateRepos(request []repositories.CreateRepoRequest) (repositories.CreateReposResponse, errors.APiError) {
+func (s *repoService) CreateRepos(cliendId string, request []repositories.CreateRepoRequest) (repositories.CreateReposResponse, errors.APiError) {
 	input := make(chan repositories.CreateRepositoriesResult)
 	output := make(chan repositories.CreateReposResponse)
 	defer close(output)
