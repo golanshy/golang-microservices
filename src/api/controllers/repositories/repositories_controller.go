@@ -9,7 +9,7 @@ import (
 )
 
 func CreateRepo(c *gin.Context) {
-	isPrivate := c.getHeader(X-Private)
+	//isPrivate := c.GetHeader("X-Private")
 	var request repositories.CreateRepoRequest
 	if err := c.ShouldBindJSON(&request); err != nil {
 		apiErr := errors.NewBadRequestError("Invalid json body")
@@ -17,8 +17,8 @@ func CreateRepo(c *gin.Context) {
 		return
 	}
 
-	clientId := c.Param("X-ClientID")
-	result, err := services.RepositoryService.CreateRepo(clientId, request)
+	//clientId := c.Param("X-ClientID")
+	result, err := services.RepositoryService.CreateRepo(request)
 	if err != nil {
 		c.JSON(err.Status(), err)
 		return
@@ -34,8 +34,8 @@ func CreateRepos(c *gin.Context) {
 		return
 	}
 
-	clientId := c.Param("X-ClientID")
-	result, err := services.RepositoryService.CreateRepos(clientId, request)
+	//clientId := c.Param("X-ClientID")
+	result, err := services.RepositoryService.CreateRepos(request)
 	if err != nil {
 		c.JSON(err.Status(), err)
 		return

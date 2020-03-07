@@ -1,15 +1,11 @@
 package services
 
 import (
-	"fmt"
 	"github.com/golanshy/golang-microservices/src/api/config"
 	"github.com/golanshy/golang-microservices/src/api/domain/github"
 	"github.com/golanshy/golang-microservices/src/api/domain/repositories"
-	"github.com/golanshy/golang-microservices/src/api/log/option_a"
-	"github.com/golanshy/golang-microservices/src/api/log/option_b"
 	"github.com/golanshy/golang-microservices/src/api/providers/github_provider"
 	"github.com/golanshy/golang-microservices/src/api/utils/errors"
-	"github.com/golanshy/golang-microservices/src/api/config"
 	"net/http"
 	"sync"
 )
@@ -18,8 +14,8 @@ type repoService struct {
 }
 
 type repoServiceInterface interface {
-	CreateRepo(cliendId string, request repositories.CreateRepoRequest) (*repositories.CreateRepoResponse, errors.APiError)
-	CreateRepos(cliendId string, request []repositories.CreateRepoRequest) (repositories.CreateReposResponse, errors.APiError)
+	CreateRepo(request repositories.CreateRepoRequest) (*repositories.CreateRepoResponse, errors.APiError)
+	CreateRepos(request []repositories.CreateRepoRequest) (repositories.CreateReposResponse, errors.APiError)
 }
 
 var (
@@ -30,7 +26,7 @@ func init() {
 	RepositoryService = &repoService{}
 }
 
-func (s *repoService) CreateRepo(cliendId string, input repositories.CreateRepoRequest) (*repositories.CreateRepoResponse, errors.APiError) {
+func (s *repoService) CreateRepo(input repositories.CreateRepoRequest) (*repositories.CreateRepoResponse, errors.APiError) {
 
 	if err := input.Validate(); err != nil {
 		return nil, err
@@ -80,7 +76,7 @@ func (s *repoService) CreateRepo(cliendId string, input repositories.CreateRepoR
 	return result, nil
 }
 
-func (s *repoService) CreateRepos(cliendId string, request []repositories.CreateRepoRequest) (repositories.CreateReposResponse, errors.APiError) {
+func (s *repoService) CreateRepos(request []repositories.CreateRepoRequest) (repositories.CreateReposResponse, errors.APiError) {
 	input := make(chan repositories.CreateRepositoriesResult)
 	output := make(chan repositories.CreateReposResponse)
 	defer close(output)
