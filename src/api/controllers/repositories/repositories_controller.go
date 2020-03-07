@@ -9,6 +9,7 @@ import (
 )
 
 func CreateRepo(c *gin.Context) {
+	isPrivate := c.getHeader(X-Private)
 	var request repositories.CreateRepoRequest
 	if err := c.ShouldBindJSON(&request); err != nil {
 		apiErr := errors.NewBadRequestError("Invalid json body")

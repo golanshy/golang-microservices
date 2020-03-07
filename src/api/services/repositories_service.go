@@ -9,6 +9,7 @@ import (
 	"github.com/golanshy/golang-microservices/src/api/log/option_b"
 	"github.com/golanshy/golang-microservices/src/api/providers/github_provider"
 	"github.com/golanshy/golang-microservices/src/api/utils/errors"
+	"github.com/golanshy/golang-microservices/src/api/config"
 	"net/http"
 	"sync"
 )
